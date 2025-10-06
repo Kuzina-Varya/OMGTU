@@ -30,7 +30,7 @@ def caesar_encrypt_decrypt(text, key, mode='encrypt'):
     return ''.join(result)
 
 
-# ====== УТИЛИТЫ ВВОДА/ВЫВОДА ======
+# ======  ВВОД/ВЫВОД ======
 def ask_input_source() -> str:
     """Спросить, откуда брать текст."""
     print("\nВыберите источник текста:")
@@ -86,7 +86,7 @@ def deliver_output(result_text: str, target: tuple[str, str|None]):
     print("=====================")
 
 def ask_yes_no(prompt: str) -> bool:
-    """Вернёт True для 'да', False для 'нет'."""
+    
     ans = input(prompt).strip().lower()
     return ans in ('y', 'yes', 'д', 'да')
 
@@ -109,7 +109,7 @@ def main():
         if choice == '1':
             text = read_text_with_choice("Введите текст для шифрования: ")
             try:
-                key = int(input("Введите ключ (число): "))
+                key = int(input("Введите ключ (число): "))%32
                 encrypted = caesar_encrypt_decrypt(text, key, 'encrypt')
                 target = ask_output_target("encrypted.txt")
                 result_text = f"Ключ: {key}\nЗашифрованный текст:\n{encrypted}"
@@ -120,7 +120,7 @@ def main():
         elif choice == '2':
             text = read_text_with_choice("Введите текст для расшифрования: ")
             try:
-                key = int(input("Введите ключ (число): "))
+                key = int(input("Введите ключ (число): "))%32
                 decrypted = caesar_encrypt_decrypt(text, key, 'decrypt')
                 target = ask_output_target("decrypted.txt")
                 result_text = f"Ключ: {key}\nРасшифрованный текст:\n{decrypted}"
@@ -155,28 +155,64 @@ def main():
                         break
             
         elif choice == '4':
-            # Пример зашифрованного текста из задания
-            encrypted_text = "шйльфавкж"
-            author_work = "грибоедовгореотума"
+            print("\n=== ВЗЛОМ ШИФРА ПЕРЕБОРОМ ===")
+            print("Вам нужно знать часть исходного текста для успешного взлома.")
+            
+            # Запрашиваем зашифрованный текст
+            encrypted_text = read_text_with_choice("Введите зашифрованный текст: ")
+            
+            # Запрашиваем известную часть исходного текста
+            known_plaintext = input("Введите известную часть исходного текста (которую ожидаете увидеть после расшифровки): ")
             
             lines = []
-            found_block = None
+            found_keys = []
+            
+            print("\nНачинаю перебор ключей...")
             for key in range(1, 33):
                 decrypted = caesar_encrypt_decrypt(encrypted_text, key, 'decrypt')
                 lines.append(f"Ключ {key}: {decrypted}")
-                if decrypted == "асудьикто":
-                    encrypted_author = caesar_encrypt_decrypt(author_work, key, 'encrypt')
-                    found_block = (key, encrypted_author)
-                    break
-            if found_block:
-                k, enc_auth = found_block
-                lines.append(f"\nНайден правильный ключ: {k}")
-                lines.append(f"Зашифрованные автор и произведение: {enc_auth}")
-                print(f"Найден ключ: {k}")
-                print(f"Зашифрованные данные: {enc_auth}")
-
+                
+                # Проверяем, содержится ли известный текст в расшифрованном
+                if known_plaintext.lower() in decrypted.lower():
+                    found_keys.append(key)
+                    print(f" Найден потенциальный ключ {key}: {decrypted}")
+            
+            # Формируем результат
+            result_lines = []
+            result_lines.append("РЕЗУЛЬТАТЫ ВЗЛОМА ШИФРА")
+            result_lines.append("=" * 50)
+            result_lines.append(f"Зашифрованный текст: {encrypted_text}")
+            result_lines.append(f"Известная часть исходного текста: {known_plaintext}")
+            result_lines.append("")
+            
+            if found_keys:
+                result_lines.append(f"НАЙДЕНЫ КЛЮЧИ: {found_keys}")
+                result_lines.append("")
+                result_lines.append("Расшифровки для найденных ключей:")
+                for key in found_keys:
+                    decrypted = caesar_encrypt_decrypt(encrypted_text, key, 'decrypt')
+                    result_lines.append(f"Ключ {key}: {decrypted}")
+                
+                # Предлагаем зашифровать новый текст найденным ключом
+                result_lines.append("")
+                result_lines.append("ДОПОЛНИТЕЛЬНАЯ ПРОВЕРКА:")
+                test_text = input("\nВведите текст для проверки найденных ключей (шифрование): ")
+                if test_text:
+                    for key in found_keys:
+                        encrypted_test = caesar_encrypt_decrypt(test_text, key, 'encrypt')
+                        result_lines.append(f"Текст '{test_text}' с ключом {key} -> '{encrypted_test}'")
+            else:
+                result_lines.append("Ключи не найдены. Возможные причины:")
+                result_lines.append("- Известный текст не содержится в расшифровках")
+                result_lines.append("- Текст зашифрован с другим алфавитом")
+                result_lines.append("- Ошибка в введенных данных")
+                result_lines.append("")
+                result_lines.append("Все варианты расшифровки:")
+                result_lines.extend(lines)
+            
+            # Выводим результаты
             target = ask_output_target("crack_result.txt")
-            result_text = "\n".join(lines)
+            result_text = "\n".join(result_lines)
             deliver_output(result_text, target)
             
         elif choice == '5':
