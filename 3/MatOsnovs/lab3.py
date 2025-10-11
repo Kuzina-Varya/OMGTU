@@ -20,7 +20,7 @@ def clean_text_simple(text):
     text = text.replace(" ", "")
     
     # Удаляем знаки препинания 
-    punctuation = '.,!?;:-()""\'\''
+    punctuation = '«».,!?;:-()""\'\''
     for char in punctuation:
         text = text.replace(char, '')
     return text
