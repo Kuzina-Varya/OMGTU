@@ -135,6 +135,63 @@ ALTER TABLE public.invoice_composition
   ON DELETE CASCADE ON UPDATE CASCADE;
 
 
+-- employees
+-- CHECK: положительный ID, не пустые ФИО/должность
+ALTER TABLE public.employees
+  ADD CONSTRAINT employees_id_pos_chk    CHECK (employee_id > 0),
+  ADD CONSTRAINT employees_name_notblank CHECK (btrim(emp_name) <> ''),
+  ADD CONSTRAINT employees_pos_notblank  CHECK (btrim(emp_position) <> '');
+
+-- suppliers
+-- CHECK: положительный код, имя не пустое
+ALTER TABLE public.suppliers
+  ADD CONSTRAINT suppliers_code_pos_chk  CHECK (supplier_code > 0),
+  ADD CONSTRAINT suppliers_name_notblank CHECK (btrim(supplier_name) <> '');
+
+-- product_catalog
+-- CHECK: положительный код; имя/категория не пустые; цена >= 0 (можно заменить на > 0)
+ALTER TABLE public.product_catalog
+  ADD CONSTRAINT products_code_pos_chk     CHECK (product_code > 0),
+  ADD CONSTRAINT products_name_notblank    CHECK (btrim(product_name) <> ''),
+  ADD CONSTRAINT products_cat_notblank     CHECK (btrim(product_category) <> ''),
+  ADD CONSTRAINT products_price_nonneg_chk CHECK (product_price >= 0);
+
+-- orders
+-- CHECK: положительный номер; дата не из будущего
+ALTER TABLE public.orders
+  ADD CONSTRAINT orders_num_pos_chk   CHECK (order_number > 0),
+  ADD CONSTRAINT orders_date_past_chk CHECK (order_date <= CURRENT_DATE);
+
+-- order_composition
+-- CHECK: положительное количество
+ALTER TABLE public.order_composition
+  ADD CONSTRAINT oc_qty_pos_chk CHECK (product_quantity > 0);
+
+-- receipts
+ -- CHECK: положительный номер чека, номер кассы, дата не из будущего
+ALTER TABLE public.receipts
+  ADD CONSTRAINT receipts_num_pos_chk      CHECK (receipt_number > 0),
+  ADD CONSTRAINT receipts_date_past_chk    CHECK (receipt_date <= CURRENT_TIMESTAMP),
+  ADD CONSTRAINT receipts_register_pos_chk CHECK (cash_register_number > 0);
+
+-- check_composition
+-- CHECK: положительное количество
+ALTER TABLE public.check_composition
+  ADD CONSTRAINT cc_qty_pos_chk CHECK (quantity_in_check > 0);
+
+-- invoices
+-- CHECK: положительный номер; дата не из будущего
+ALTER TABLE public.invoices
+  ADD CONSTRAINT invoices_num_pos_chk   CHECK (invoice_number > 0),
+  ADD CONSTRAINT invoices_date_past_chk CHECK (invoice_date <= CURRENT_DATE);
+
+-- invoice_composition
+-- CHECK: положительное количество
+ALTER TABLE public.invoice_composition
+  ADD CONSTRAINT ic_qty_pos_chk CHECK (product_quantity > 0);
+
+
+
 
 
 
