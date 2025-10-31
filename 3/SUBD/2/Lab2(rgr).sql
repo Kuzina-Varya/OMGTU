@@ -209,6 +209,7 @@ FROM pg_constraint
 WHERE contype='f'
 ORDER BY conname;
 
+
 -- Характеристики БД
 SELECT
   d.datname                               AS database,
