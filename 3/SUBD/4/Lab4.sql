@@ -1,3 +1,8 @@
+-- Очистка (при повторе)
+DROP TABLE IF EXISTS product_media CASCADE;
+DROP TABLE IF EXISTS receipt_payments CASCADE;
+
+
 -- === массивы: фотографии и тэги по товарам ===
 CREATE TABLE public.product_media (
   product_code integer PRIMARY KEY
@@ -7,7 +12,7 @@ CREATE TABLE public.product_media (
   photos text[] NOT NULL,                  -- массив путей/URL к фото
   tags   text[] DEFAULT '{}'::text[],      -- массив тэгов
 
-  -- бизнес-правила
+  -- правила
   CONSTRAINT pm_photos_not_empty CHECK (cardinality(photos) > 0)
 );
 
@@ -67,6 +72,9 @@ SELECT r.receipt_number, p.payment->>'method' AS method, (p.payment->>'amount'):
 FROM public.receipt_payments p
 JOIN public.receipts r USING (receipt_number)
 WHERE p.payment->>'method' = 'card';
+
+SELECT * FROM public.receipt_payments;
+SELECT * FROM public.product_media;
 
 -- Все поля JSON 
 SELECT receipt_number,
