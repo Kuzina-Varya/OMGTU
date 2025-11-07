@@ -67,6 +67,17 @@ SELECT * FROM public.receipts WHERE receipt_number = 70003;
 -- Состав чека добавлен?
 SELECT * FROM public.check_composition WHERE receipt_number = 70003;
 
+-- Удаляем состав чека (иначе FOREIGN KEY не даст удалить чек)
+DELETE FROM public.check_composition
+WHERE receipt_number = 70003;
+
+-- Удаляем сам чек
+DELETE FROM public.receipts
+WHERE receipt_number = 70003;
+
+--Удаление 
+DROP PROCEDURE public.add_receipt_with_items;
+
 /*Процедура обновления, ее вызов и проверка результата*/
 CREATE OR REPLACE PROCEDURE public.update_product_price(
     p_product_code INTEGER,
@@ -89,6 +100,8 @@ BEGIN
     RAISE NOTICE 'Цена товара % обновлена на %', p_product_code, p_new_price;
 END;
 $$;
+--Откат
+BEGIN;
 
 -- Вызов процедуры
 CALL public.update_product_price(100, 40.00);
@@ -98,6 +111,7 @@ SELECT product_code, product_name, product_price
 FROM public.product_catalog
 WHERE product_code = 100;
 
+ROLLBACK;
 
 /*Процедура удаления*/
 CREATE OR REPLACE PROCEDURE public.delete_old_orders(
@@ -117,12 +131,12 @@ BEGIN
     RAISE NOTICE 'Удалено % старых заявок (старше % дней)', v_count, p_older_than_days;
 END;
 $$;
-
+BEGIN;
 CALL public.delete_old_orders(1);
 
 -- Сколько заявок осталось?
 SELECT * FROM public.orders;
-
+ROLLBACK;
 /*Функция получения суммы по чеку*/
 CREATE OR REPLACE FUNCTION public.get_total_receipt_amount(
     p_receipt_number INTEGER

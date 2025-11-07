@@ -10,7 +10,7 @@ JOIN public.employees e ON e.employee_id = r.employee_id
 WHERE r.receipt_date >= CURRENT_DATE - INTERVAL '30 days';
 --Проверка и откат
 SELECT * FROM public.active_receipts;
-DROP MATERIALIZED VIEW IF EXISTS public.active_receipts;
+DROP VIEW IF EXISTS public.active_receipts;
 
 --материализованоое представление
 CREATE MATERIALIZED VIEW public.product_sales_summary AS
@@ -27,6 +27,33 @@ GROUP BY p.product_code, p.product_name, p.product_category, p.product_price;
 --Проверка и откат
 SELECT * FROM public.product_sales_summary;
 DROP MATERIALIZED VIEW IF EXISTS public.product_sales_summary;
+-- Посмотреть, как оно устроено:
+--\d+ public.product_sales_summary
+--C:\Program Files\PostgreSQL\15\bin
+
+--Обновление
+REFRESH MATERIALIZED VIEW public.product_sales_summary;
+
+--Добавим данные
+INSERT INTO check_composition (receipt_number, product_code, quantity_in_check)
+VALUES (70001, 100, 3);
+--Удаление
+DELETE FROM public.check_composition
+WHERE receipt_number = 70001 AND product_code = 100;
+
+--Проверим что лежит
+SELECT * FROM public.check_composition
+WHERE receipt_number = 70001;
+
+--Узнаем оид материального представления
+SELECT oid
+FROM pg_class
+WHERE relname = 'product_sales_summary'
+  AND relkind = 'm'; 
+
+-- Посмотреть SQL-определение:
+SELECT definition FROM pg_matviews
+WHERE matviewname = 'product_sales_summary';
 
 --материализованное представление
 CREATE MATERIALIZED VIEW public.supplier_invoice_totals AS
@@ -41,6 +68,16 @@ GROUP BY s.supplier_code, s.supplier_name;
 --Проверка и откат
 SELECT * FROM public.supplier_invoice_totals;
 DROP MATERIALIZED VIEW IF EXISTS public.supplier_invoice_totals;
+-- Посмотреть, как оно устроено:
+--\d+ public.supplier_invoice_totals
+--C:\Program Files\PostgreSQL\15\bin
+
+--Обновление
+REFRESH MATERIALIZED VIEW public.supplier_invoice_totals;
+
+-- Посмотреть SQL-определение:
+SELECT definition FROM pg_matviews
+WHERE matviewname = 'product_sales_summary';
 
 --запрос с вложенным подзапросом
 SELECT product_name, total_sold
