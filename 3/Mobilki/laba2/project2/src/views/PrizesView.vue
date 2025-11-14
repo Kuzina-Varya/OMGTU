@@ -1,12 +1,14 @@
-<script setup>
-import ReactiveTable from '@/components/ReactiveTable.vue'
-import { prizes } from '@/data/prizes.js'
+<!-- src/views/PrizesView.vue -->
+<script setup lang="ts">
+import ReactiveTable from '@/components/ReactiveTable.vue';
+import { prizes } from '@/data/prizes';
+import type { Prize } from '@/data/prizes';
 
 const columns = [
   { key: 'category', label: 'Категория' },
   { key: 'date', label: 'Дата вручения (пример)' },
   { key: 'grant', label: 'Стоимость гранта (пример)' }
-]
+] as const;
 </script>
 
 <template>

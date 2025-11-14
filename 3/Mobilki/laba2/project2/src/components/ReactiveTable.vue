@@ -15,17 +15,23 @@
   </table>
 </template>
 
-<script setup>
-defineProps({
-  data: {
-    type: Array,
-    required: true
-  },
-  columns: {
-    type: Array,
-    required: true
-  }
-})
+<script setup lang="ts">
+import { defineProps } from 'vue';
+
+interface Column {
+  key: string;
+  label: string;
+}
+
+// Предположим, что данные — объект с произвольными строковыми/числовыми полями
+interface RowData {
+  [key: string]: any; // можно уточнить позже, когда будут типы laureates/prizes
+}
+
+defineProps<{
+  data: RowData[];
+  columns: Column[];
+}>();
 </script>
 
 <style scoped>
