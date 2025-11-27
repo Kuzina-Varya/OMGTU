@@ -36,3 +36,6 @@ npm run dev
 ```sh
 npm run build
 ```
+//npm run dev (npm run build)
+//ctrl+c -выход
+//ctrl_r - перезагрузка
