@@ -1,29 +1,23 @@
+// src/services/prizes.service.ts
 import { nobelApi } from './http.service';
-
-export interface NobelPrize {
-  year: string;
-  category: string;
-  laureates?: Array<{
-    id: string;
-    firstname?: string;
-    surname?: string;
-  }>;
-}
-
-export interface PrizeResponse {
-  prizes: NobelPrize[];
-}
+import {
+  PrizesResponseCodec,
+  PrizesResponse,
+  NobelPrize
+} from '@/types/nobel.types';
 
 export class PrizesService {
   static async getAll(page = 1, limit = 10): Promise<NobelPrize[]> {
-    const data = await nobelApi.get<PrizeResponse>('/prize.json');
+    const data: PrizesResponse = await nobelApi.get('/prize.json', PrizesResponseCodec);
     const startIndex = (page - 1) * limit;
     return data.prizes.slice(startIndex, startIndex + limit);
   }
 
   static async searchByCategory(category: string): Promise<NobelPrize[]> {
-    const data = await nobelApi.get<PrizeResponse>('/prize.json');
+    const data: PrizesResponse = await nobelApi.get('/prize.json', PrizesResponseCodec);
     const query = category.toLowerCase();
-    return data.prizes.filter(p => p.category.toLowerCase().includes(query));
+    return data.prizes.filter((p: NobelPrize) =>
+      p.category.toLowerCase().includes(query)
+    );
   }
 }

@@ -1,36 +1,23 @@
+// src/services/laureates.service.ts
 import { nobelApi } from './http.service';
-
-export interface NobelLaureate {
-  id: string;
-  firstname?: string;
-  surname?: string;
-  born?: string;
-  died?: string;
-  gender: string;
-  prizes: Array<{
-    year: string;
-    category: string;
-  }>;
-}
-
-export interface LaureateResponse {
-  laureates: NobelLaureate[];
-}
+import {
+  LaureatesResponseCodec,
+  LaureatesResponse,
+  NobelLaureate
+} from '@/types/nobel.types';
 
 export class LaureatesService {
   static async getAll(page = 1, limit = 10): Promise<NobelLaureate[]> {
-    const data = await nobelApi.get<LaureateResponse>('/laureate.json');
-    // Nobel API не поддерживает пагинацию → делаем её на клиенте
+    const data: LaureatesResponse = await nobelApi.get('/laureate.json', LaureatesResponseCodec);
     const startIndex = (page - 1) * limit;
     return data.laureates.slice(startIndex, startIndex + limit);
   }
 
   static async searchByName(name: string): Promise<NobelLaureate[]> {
-    const data = await nobelApi.get<LaureateResponse>('/laureate.json');
+    const data: LaureatesResponse = await nobelApi.get('/laureate.json', LaureatesResponseCodec);
     const query = name.toLowerCase();
-    return data.laureates.filter(l => {
-      const fullName = `${l.firstname || ''} ${l.surname || ''}`.toLowerCase();
-      return fullName.includes(query);
-    });
+    return data.laureates.filter((l: NobelLaureate) =>
+      `${l.firstname || ''} ${l.surname || ''}`.toLowerCase().includes(query)
+    );
   }
 }

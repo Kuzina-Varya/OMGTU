@@ -1,22 +1,22 @@
 //npm install axios
 //npm install --save-dev @types/axios 
 //npm install --save-dev @types/node
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+// src/services/http.service.ts
+import axios, { AxiosInstance } from 'axios';
+import * as t from 'io-ts';
+import { decodeOrThrow } from '@/utils/decode';
 
 class HttpService {
   private client: AxiosInstance;
 
   constructor(baseURL: string) {
-    this.client = axios.create({
-      baseURL,
-      timeout: 10000,
-    });
+    this.client = axios.create({ baseURL });
   }
 
-  async get<T>(url: string, params?: Record<string, unknown>): Promise<T> {
-    const response: AxiosResponse<T> = await this.client.get<T>(url, { params });
-    return response.data;
+  async get<T>(url: string, codec: t.Type<T>, params?: Record<string, unknown>): Promise<T> {
+    const res = await this.client.get(url, { params });
+    return decodeOrThrow(codec, res.data);
   }
 }
 
-export const nobelApi = new HttpService('https://api.nobelprize.org/v1');
+export const nobelApi = new HttpService('/api/v1');

@@ -19,7 +19,7 @@ const tableData = computed(() => {
   return prizes.value.map(p => ({
     year: p.year,
     category: p.category,
-    laureatesCount: p.laureates ? p.laureates.length : 0
+    laureatesCount: Array.isArray(p.laureates) ? p.laureates.length : 0
   }));
 });
 
