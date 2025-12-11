@@ -42,9 +42,9 @@ def quadratic_sieve_factor(m: int) -> tuple:
     print(f"\n=== Метод квадратичного решета для m = {m} ===")
     
     # Запрос модулей
-    a = int(input("Введите модуль a (например, 3): "))
-    b = int(input("Введите модуль b (например, 5): "))
-    c = int(input("Введите модуль c (например, 7): "))
+    a = int(input("Введите модуль a : "))
+    b = int(input("Введите модуль b : "))
+    c = int(input("Введите модуль c : "))
     mods = [a, b, c]
     
     # Шаг 1: построить решета (квадратичные вычеты)
@@ -78,7 +78,7 @@ def quadratic_sieve_factor(m: int) -> tuple:
         for mod in mods:
             z_mod = z % mod
             pos = (x - start + offsets[mod]) % mod  # смещение
-            # Но проще: проверить, является ли z_mod квадратичным вычетом
+            # проверить, является ли z_mod квадратичным вычетом
             if not sieves[mod][z_mod]:
                 valid = False
                 break
