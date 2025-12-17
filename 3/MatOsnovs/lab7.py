@@ -17,6 +17,8 @@ def isqrt(m: int) -> int:
 
 def modexp(base: int, exp: int, mod: int) -> int:
     """Быстрое возведение в степень по модулю."""
+    if mod == 1:
+        return 0
     result = 1
     base %= mod
     while exp > 0:
@@ -57,6 +59,17 @@ def baby_step_giant_step(a: int, b: int, p: int) -> int:
             print(f"\n Найдено совпадение: y_{i} = z_{j} = {y}")
             print(f"   Вычисляем x = i * k - j = {i} * {k} - {j} = {x}")
             
+            # --- ИСПРАВЛЕНИЕ: приведение отрицательного x к положительному ---
+            if x < 0:
+                # Предполагаем, что p — простое → порядок делит p-1
+                order = p - 1
+                x = x % order
+                # Гарантируем, что x > 0 (если x был кратен order, то x = 0 → но 0 редко решение)
+                if x == 0:
+                    x = order
+                print(f"   x отрицательный → приведён к положительному: x = {x}")
+            # ----------------------------------------------------------------
+
             # Проверка
             check = modexp(a, x, p)
             print(f"   Проверка: {a}^{x} mod {p} = {check}")
@@ -69,7 +82,6 @@ def baby_step_giant_step(a: int, b: int, p: int) -> int:
     raise ValueError("Решение не найдено. Возможно, дискретный логарифм не существует.")
 
 def main():
-    
     print("Метод 'шаг младенца – шаг великана'\n")
     
     # Ввод данных с консоли
@@ -79,6 +91,9 @@ def main():
 
     if p <= 1:
         print("Ошибка: p должно быть > 1")
+        return
+    if a % p == 0:
+        print("Ошибка: a должно быть взаимно просто с p")
         return
 
     try:
