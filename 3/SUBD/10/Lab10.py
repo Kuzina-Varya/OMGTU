@@ -13,7 +13,7 @@ DB_CONFIG = {
 }
 
 # Путь к JSON-файлу (сейчас .gz)
-JSON_FILE_PATH = 'goodreads_books.json.gz'  # Укажи правильный путь
+JSON_FILE_PATH = 'goodreads_books.json.gz'  
 
 BATCH_SIZE = 5000
 
@@ -64,7 +64,7 @@ def import_books():
             if len(batch) >= BATCH_SIZE:
                 insert_batch(conn, batch)
                 total += len(batch)
-                print(f"✅ Вставлено {total} записей...")
+                print(f" Вставлено {total} записей...")
                 batch = []
 
     # Вставляем остаток
@@ -73,7 +73,7 @@ def import_books():
         total += len(batch)
         print(f" Вставлено {total} записей (финальный батч).")
 
-    print(f"🏁 Импорт завершён. Всего: {total} записей. Пропущено: {skipped}")
+    print(f" Импорт завершён. Всего: {total} записей. Пропущено: {skipped}")
     conn.close()
 
 def insert_batch(conn, batch):
