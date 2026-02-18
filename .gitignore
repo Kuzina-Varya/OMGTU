@@ -1,0 +1,74 @@
+# --- Виртуальные окружения ---
+venv/
+env/
+.venv/
+ENV/
+venv.bak/
+.env
+
+# --- Файлы Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# --- IDE и редакторы ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ЛОГИ AIRFLOW (ОЧЕНЬ ВАЖНО!)
+# ============================================
+logs/
+*.log
+*.log.*
+
+# ============================================
+# ВРЕМЕННЫЕ ДАННЫЕ
+# ============================================
+data/              # Сохранённые файлы расписания
+configs/           # Папка с файлом-флагом (создаётся при запуске)
+__pycache__/       # Python кэш
+*.pyc              # Скомпилированные Python файлы
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# DOCKER
+# ============================================
+.dockerenv
+docker-compose.override.yml  # Локальные переопределения
+*.pid
+*.pid.lock
+
+# БАЗА ДАННЫХ AIRFLOW
+# ============================================
+airflow.db         # SQLite БД Airflow
+airflow.db-shm
+airflow.db-wal
+webserver_config.py
+
+# --- Отдельные файлы ---
+goodreads_books.json.gz
