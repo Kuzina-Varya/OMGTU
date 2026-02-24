@@ -3,6 +3,9 @@
 
 # https://rasp.omgtu.ru/api/search?term={name}&type=person
 
+#просмотр расписания:docker exec -it lab1-airflow-worker-1 sh -lc 'ls -t /opt/airflow/dags/data/*.json | head -n 1 | xargs -r cat'
+
+
 from tracemalloc import start
 from airflow.decorators import dag, task
 from airflow.operators.python import PythonOperator, BranchPythonOperator
@@ -12,7 +15,13 @@ from datetime import datetime
 from airflow.models import Param
 import os
 import requests
+from pathlib import Path
+import json
+from airflow.providers.standard.sensors.python import PythonSensor
+
+
 FILE_PATH = "../opt/airflow/dags/configs/start_process.conf"
+SCHEDULE_PATH = Path("/opt/airflow/dags/data")
 
 @dag(
     dag_id='rasp_dag',
@@ -36,14 +45,15 @@ def rasp_dag():
         os.makedirs(os.path.dirname(FILE_PATH), exist_ok=True)
         open(FILE_PATH, "w").close()
         print(f"Файл создан: {FILE_PATH}")
-
-
-    @task(task_id='check_file')
-    def check_file():
-        if os.path.exists(FILE_PATH):
-            return "fetch_id"
-        else:
-            return "stop_dag"
+       
+    
+    wait_for_file = PythonSensor(
+        task_id="wait_for_file",
+        python_callable=lambda: os.path.exists(FILE_PATH),
+        poke_interval=10,
+        timeout=60 * 60,
+        mode="reschedule"
+    )
 
 
     @task(task_id='fetch_id')
@@ -64,8 +74,12 @@ def rasp_dag():
         date_end = context['params']['date_end']
         teacher_id = context['ti'].xcom_pull(key='teacher_id', task_ids='fetch_id')
         url = f"https://rasp.omgtu.ru/api/schedule/person/{teacher_id}?start={date_start}&finish={date_end}&lng=1"
+
         response = requests.get(url)
         schedule= response.json()
+
+        context['ti'].xcom_push(key='schedule', value=schedule)
+
         if(len(schedule) == 0):
             print("На этой неделе пар у коллеги нет, можно отдыхать")
             return "stop_dag"
@@ -75,9 +89,26 @@ def rasp_dag():
                 print (subject + "\n")
             return len(schedule)
 
+    @task(task_id='save_schedule')
+    def save_schedule(**context):
+        schedule = context['ti'].xcom_pull(key='schedule', task_ids='get_schedule')
+        SCHEDULE_PATH.mkdir(parents=True, exist_ok=True)
+
+        run_dt = context["logical_date"]  # дата запуска DAG-run
+        fname = run_dt.strftime("%Y-%m-%d_%H-%M-%S") + ".json"
+        file_path = SCHEDULE_PATH / fname
+        
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(schedule, f, ensure_ascii=False, indent=2)
+
+        print(f"Расписание сохранено в файл: {file_path}")
+
 
     fetch_id_task = fetch_id()
-    start >> create_file() >> check_file() >> [fetch_id_task, stop_dag]
-    fetch_id_task >> get_schedule() >> stop_dag
+    save_schedul_task = save_schedule()
+
+    start >> create_file() >> wait_for_file >> fetch_id_task >> get_schedule() >> [save_schedul_task, stop_dag]
+    save_schedul_task >> stop_dag
+    
 rasp_dag()
     

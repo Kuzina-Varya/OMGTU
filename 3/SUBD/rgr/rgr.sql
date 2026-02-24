@@ -525,7 +525,7 @@ SELECT
     c.name_of_component,
     c.model_of_component,
     c.quantity,
-    ce.name_of_equipment
+    ce.name_of_equipment 
 FROM Component c
 JOIN ComputingEquipment ce ON c.equipment_id = ce.equipment_id
 WHERE c.quantity > (SELECT AVG(quantity) FROM Component);

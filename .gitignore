@@ -72,3 +72,4 @@ webserver_config.py
 
 # --- Отдельные файлы ---
 goodreads_books.json.gz
+*.json
