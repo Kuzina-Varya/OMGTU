@@ -24,38 +24,97 @@ import os
 def lab2_dag():
     start = EmptyOperator(task_id="start")
 
-    @task(task_id="get_teachers")
-    def get_teachers(**context) -> str:
+    @task(task_id="prepare_teacher_name_paths")
+    def prepare_teacher_name_paths(**context) -> list[str]:
         names_str = context["params"]["teacher_names"]
-        names = [x.strip() for x in names_str.split(",") if x.strip()]
+        names = [x.strip() for x in names_str.split(",") if x.strip() != ""]
 
+        run_dt = context["logical_date"]
+
+        hook = WebHDFSHook(webhdfs_conn_id="webhdfs")
+        client = hook.get_conn()
+
+        result_paths = []
+
+        for i, name in enumerate(names, start=1):
+            hdfs_path = (
+            f"/user/airflow/teacher_name_requests/"
+            f"year={run_dt.year}/month={run_dt.month:02d}/day={run_dt.day:02d}/"
+            f"idx={i:02d}/name.json"
+            )
+
+            client.makedirs(os.path.dirname(hdfs_path))
+
+            payload = json.dumps({"name": name}, ensure_ascii=False, indent=2).encode("utf-8")
+            client.write(hdfs_path, payload, overwrite=True)
+
+            result_paths.append(hdfs_path)
+
+        return result_paths
+
+    @task(task_id="find_teacher_id")
+    def find_teacher_id(name_path: str, **context) -> str:
+        hook = WebHDFSHook(webhdfs_conn_id="webhdfs")
+        client = hook.get_conn()
+
+        with client.read(name_path) as r:
+            data = json.loads(r.read().decode("utf-8"))
+
+        name = data["name"]
+
+        r = requests.get(
+        f"https://rasp.omgtu.ru/api/search?term={name}&type=person",
+        timeout=30,
+        )
+        r.raise_for_status()
+        api_data = r.json()
+
+        if not api_data:
+            result_obj = {"name": name, "teacher_id": None}
+        else:
+            result_obj = {"name": name, "teacher_id": int(api_data[0]["id"])}
+
+        run_dt = context["logical_date"]
+        idx_part = [part for part in name_path.split("/") if part.startswith("idx=")][0]
+
+        result_path = (
+        f"/user/airflow/teacher_id_results/"
+        f"year={run_dt.year}/month={run_dt.month:02d}/day={run_dt.day:02d}/"
+        f"{idx_part}/teacher.json"
+        )
+
+        client.makedirs(os.path.dirname(result_path))
+
+        payload = json.dumps(result_obj, ensure_ascii=False, indent=2).encode("utf-8")
+        client.write(result_path, payload, overwrite=True)
+
+        return result_path
+
+    @task(task_id="get_teachers")
+    def get_teachers(result_paths: list[str], **context) -> str:
         teacher_ids: list[int] = []
         skipped: list[str] = []
 
-        for name in names:
-            r = requests.get(
-                f"https://rasp.omgtu.ru/api/search?term={name}&type=person",
-                timeout=30,
-            )
-            r.raise_for_status()
-            data = r.json()
+        hook = WebHDFSHook(webhdfs_conn_id="webhdfs")
+        client = hook.get_conn()
 
-            if not data:
-                skipped.append(name)
-                continue
-            teacher_ids.append(int(data[0]["id"]))
+        for result_path in result_paths:
+            with client.read(result_path) as r:
+                item = json.loads(r.read().decode("utf-8"))
+
+            if item["teacher_id"] is None:
+                skipped.append(item["name"])
+            else:
+                teacher_ids.append(int(item["teacher_id"]))
 
         payload_obj = {"teacher_ids": teacher_ids, "skipped": skipped}
 
         run_dt = context["logical_date"]
         hdfs_path = (
-            f"/user/airflow/teacher_ids/"
-            f"year={run_dt.year}/month={run_dt.month:02d}/day={run_dt.day:02d}/"
-            f"teachers.json"
+        f"/user/airflow/teacher_ids/"
+        f"year={run_dt.year}/month={run_dt.month:02d}/day={run_dt.day:02d}/"
+        f"teachers.json"
         )
-
-        hook = WebHDFSHook(webhdfs_conn_id="webhdfs")
-        client = hook.get_conn()
 
         client.makedirs(os.path.dirname(hdfs_path))
 
@@ -63,6 +122,8 @@ def lab2_dag():
         client.write(hdfs_path, payload, overwrite=True)
 
         return hdfs_path
+
+
 
     @task(task_id="extract_teacher_ids")
     def extract_teacher_ids(hdfs_path: str) -> list[int]:
@@ -130,14 +191,16 @@ def lab2_dag():
     end = EmptyOperator(task_id="end")
 
     #  путь -> чтение -> mapping
-    teachers_file = get_teachers()
+    name_paths = prepare_teacher_name_paths()
+    teacher_result_paths = find_teacher_id.expand(name_path=name_paths)
+    teachers_file = get_teachers(teacher_result_paths)
+
+    start >> name_paths >> teacher_result_paths >> teachers_file
 
     skipped_text = format_skipped(teachers_file)
     teacher_ids = extract_teacher_ids(teachers_file)
-
     mapped = process_teacher_schedule.expand(teacher_id=teacher_ids)
 
-    start >> teachers_file
     skipped_text >> report_skipped
     report_skipped >> mapped >> end
 
