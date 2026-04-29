@@ -75,6 +75,7 @@ x-airflow-common:
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
     # The following line can be used to set a custom config file, stored in the local config folder
     AIRFLOW_CONFIG: '/opt/airflow/config/airflow.cfg'
+    JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
   volumes:
     - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
@@ -119,6 +120,23 @@ services:
       - ./hadoop.env
     depends_on:
       - namenode
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.3
+    container_name: lab1-clickhouse
+    ports:
+      - "8123:8123"
+    volumes:
+      - clickhouse-db-volume:/var/lib/clickhouse
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "localhost:8123/ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    environment:
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: airflow
+      CLICKHOUSE_DB: rasp_omgtu
   postgres:
     image: postgres:16
     environment:
@@ -368,3 +386,4 @@ volumes:
   postgres-db-volume:
   hadoop_namenode:
   hadoop_datanode:
+  clickhouse-db-volume:

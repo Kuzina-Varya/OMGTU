@@ -1,0 +1,134 @@
+﻿
+FullName                                                                                           
+--------                                                                                           
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Diskra\2 семак\1 курс\Алгоритм Дейкстры.cs             
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Diskra\2 семак\1 курс\Алгоритм Кракаля.cs              
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Diskra\2 семак\1 курс\Алгоритм Прима.cs                
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Diskra\2 семак\1 курс\Алгоритм Робертса Флореса.cs     
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Diskra\2 семак\1 курс\Алгоритм Флойда.cs               
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Diskra\2 семак\1 курс\Алгоритм Форда Беллмана.cs       
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Diskra\2 семак\1 курс\Алгоритм Форда Фалкерсона.cs     
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Diskra\2 семак\1 курс\Волновой Алгоритм.cs             
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Diskra\2 семак\1 курс\Поиск в глубину.cs               
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Diskra\2 семак\1 курс\Поиск в ширину.cs                
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\1 семак\1 курс\krestyanin.cs                      
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\1 семак\1 курс\razvedka.cs                        
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\1 семак\1 курс\грядки.cs                          
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\1 семак\1 курс\деньги.py                          
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\1 семак\1 курс\дом.py                             
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\1 семак\1 курс\итенсификация производства.cs      
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\1 семак\1 курс\молоко.cs                          
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\1 семак\1 курс\паук и муха.cs                     
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\1 семак\1 курс\формы для отливки.py               
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\2 семак\1 курс\Города.cs                          
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\2 семак\1 курс\Зельеваренье.cs                    
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\2 семак\1 курс\Золотая рыбка.cs                   
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\2 семак\1 курс\Компания.cs                        
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\2 семак\1 курс\Кубик рубика.cs                    
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\2 семак\1 курс\Не съем так надкушу.cs             
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\2 семак\1 курс\Отгадай число.cs                   
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\2 семак\1 курс\Тау-Кита.cs                        
+C:\Users\Varvara\Desktop\Repository\OMGTU\1\Olim\2 семак\1 курс\Шестиренки.cs                      
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\1 семак\1 курс\01,11.cs                            
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\1 семак\1 курс\04.10.cs                            
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\1 семак\1 курс\12.12.cs                            
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\1 семак\1 курс\20.09.cs                            
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\1 семак\1 курс\26,12.cs                            
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\1 семак\1 курс\trassa.cs                           
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\1 семак\1 курс\заправки.cs                         
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\1 семак\1 курс\кошки мышки 2.cs                    
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\1 семак\1 курс\кошки-мышки.cs                      
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\1 семак\1 курс\кр3.cs                              
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\1 семак\1 курс\туристы.cs                          
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\1 семак\1 курс\цеха.cs                             
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\07.02.23(аудитории).cs              
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\18,02(аррей листы).cs               
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\Запросы(банк).cs                    
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\Запросы.cs                          
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\Интерфейсы и делегаты 1.0.1.cs      
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\интерфейсы и делегаты(мойка).cs     
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\Кинотеатр.cs                        
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\Линки 1.cs                          
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\Линки 2.cs                          
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\обобщения.cs                        
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\Польская запись через стэк 2.0.cs   
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\Последовательности в файлах.cs      
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\Последовательности строк в файлах.cs
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\словарь,очередь,хэштаблицы.cs       
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\Стэк со скобками.cs                 
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\Сэты 2.0.cs                         
+C:\Users\Varvara\Desktop\Repository\OMGTU\2\Alg\2 семак\1 курс\Телефонная база.cs                  
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\ChislMethods\gruh.py                                   
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\ChislMethods\lab2_1.py                                 
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\ChislMethods\lab2_2.py                                 
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\ChislMethods\lab2_3.py                                 
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\ChislMethods\lab3_1.py                                 
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\ChislMethods\lab3_2.py                                 
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\ChislMethods\lab3_3.py                                 
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\ChislMethods\lab3_dop.py                               
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\ChislMethods\lab4_1.py                                 
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\ChislMethods\lab4_2.py                                 
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\ChislMethods\lab4_3.py                                 
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\MatOsnovs\lab1.py                                      
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\MatOsnovs\lab2.py                                      
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\MatOsnovs\lab3.py                                      
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\MatOsnovs\lab4.py                                      
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\MatOsnovs\lab5.py                                      
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\MatOsnovs\lab6.py                                      
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\MatOsnovs\lab7.py                                      
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Methods\create_table_lab1.sql                          
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba1\laureats.html                            
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba1\prizes.html                              
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba1\styles.css                               
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\src\data\laureates.ts         
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\src\data\prizes.ts            
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\src\router\index.ts           
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\src\services\http.service.ts  
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\src\services\laureates.serv...
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\src\services\prizes.service.ts
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\src\types\nobel.types.ts      
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\src\utils\decode.ts           
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\src\main.ts                   
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\src\shims-vue.d.ts            
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\index.html                    
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\jsconfig.json                 
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\package-lock.json             
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\package.json                  
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\README.md                     
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\tsconfig.json                 
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\tsconfig.node.json            
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Mobilki\laba2-3\project2\vite.config.ts                
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Practicum\notebooks\lab1.ipynb                         
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Practicum\notebooks\lab2-6.ipynb                       
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Practicum\notebooks\ДЗ_Кузина_МО-231.ipynb             
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Practicum\app.py                                       
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\Practicum\Report_50.ipynb                              
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\10\Lab10.py                                       
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\10\Lab10.sql                                      
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\2\Lab2(Ex2).sql                                   
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\2\Lab2(rgr).sql                                   
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\2\Lab2(rgr_create).sql                            
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\2\Lad 2(Ex1).sql                                  
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\3\Lab3.sql                                        
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\4\Lab4.sql                                        
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\5\Lab5.sql                                        
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\6\Lab6.sql                                        
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\7\Lab7.sql                                        
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\8\Lab8.sql                                        
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\9\Lab9.sql                                        
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\rgr\rgr.sql                                       
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\rgr\гпи.sql                                       
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\SUBD\rgr\цуукк.sql                                     
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\TehnBD\lab1\dags\data\2026-02-18_10-18-46.json         
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\TehnBD\lab1\dags\data\2026-02-18_10-28-03.json         
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\TehnBD\lab1\dags\data\2026-02-18_10-29-42.json         
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\TehnBD\lab1\dags\data\2026-02-19_10-40-17.json         
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\TehnBD\lab1\dags\data\2026-02-19_10-44-48.json         
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\TehnBD\lab1\dags\data\2026-02-19_11-20-16.json         
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\TehnBD\lab1\dags\data\2026-02-19_11-54-19.json         
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\TehnBD\lab1\dags\exs_dag.py                            
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\TehnBD\lab1\dags\lab2.py                               
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\TehnBD\lab1\dags\rasp_dag.py                           
+C:\Users\Varvara\Desktop\Repository\OMGTU\3\TehnBD\lab1\docker-compose.yaml                        
+
+

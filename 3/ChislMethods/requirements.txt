@@ -1,2 +1,3 @@
-pip install sympy
-pip install numpy
+sympy
+numpy
+matplotlib

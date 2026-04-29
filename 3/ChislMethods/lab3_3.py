@@ -2,7 +2,7 @@ import numpy as np
 
 class TridiagonalSolver:
     """
-    Метод прогонки для трехдиагональных матриц (Раздел 3.3 методички)
+    Метод прогонки для трехдиагональных матриц 
     """
 
     @staticmethod
@@ -44,38 +44,49 @@ class TridiagonalSolver:
         return x
 
 if __name__ == "__main__":
-    print("="*50)
+    print("="*60)
     print("МЕТОД ПРОГОНКИ (Трехдиагональная матрица)")
-    print("="*50)
+    print("="*60)
+    print("\nВариант 10:")
+    print("  3x₁ + 2.3x₂           = 2")
+    print("  x₁ - 3x₂ + x₃         = 3.2")
+    print("      2.2x₂ + 4x₃ - x₄  = 6")
+    print("           5x₃ + 7x₄    = 5")
+    print("="*60)
 
-    # Пример из методички: Вариант 1 (стр. 92, задание "в")
-    # 2x1 + 1x2           = 2
-    # 0.5x1 + 2x2 - 1x3   = 0
-    #      -1x2 + 2x3 - 1x4 = 3
-    #           2x3 + 2x4 = 2
-    
-    print("\nРешение Варианта 1 (задание 'в'):")
+    # Система уравнений:
+    # 3x₁ + 2.3x₂           = 2
+    # x₁ - 3x₂ + x₃         = 3.2
+    #      2.2x₂ + 4x₃ - x₄ = 6
+    #           5x₃ + 7x₄   = 5
     
     # Коэффициенты (индексы 0..3 соответствуют уравнениям 1..4)
-    a = np.array([0, 0.5, -1, 2], dtype=float)   # Нижняя диагональ
-    b = np.array([2, 2, 2, 2], dtype=float)      # Главная диагональ
-    c = np.array([1, -1, -1, 0], dtype=float)    # Верхняя диагональ
-    d = np.array([2, 0, 3, 2], dtype=float)      # Правая часть
+    a = np.array([0, 1, 2.2, 5], dtype=float)    # Нижняя диагональ (под главной)
+    b = np.array([3, -3, 4, 7], dtype=float)     # Главная диагональ
+    c = np.array([2.3, 1, -1, 0], dtype=float)   # Верхняя диагональ (над главной)
+    d = np.array([2, 3.2, 6, 5], dtype=float)    # Правая часть
 
     solver = TridiagonalSolver()
 
     try:
         x = solver.thomas_algorithm(a, b, c, d)
-        print(f"\nРешение методом прогонки: {np.round(x, 4)}")
+        
+        print(f"\nРешение методом прогонки:")
+        for i in range(len(x)):
+            print(f"  x{i+1} = {x[i]:.6f}")
         
         # Проверка невязки
         A_test = np.array([
-            [2, 1, 0, 0],
-            [0.5, 2, -1, 0],
-            [0, -1, 2, -1],
-            [0, 0, 2, 2]
+            [3, 2.3, 0, 0],
+            [1, -3, 1, 0],
+            [0, 2.2, 4, -1],
+            [0, 0, 5, 7]
         ])
         residual = np.dot(A_test, x) - d
-        print(f"Максимальная невязка: {np.max(np.abs(residual)):.6f}")
+        print(f"\nПроверка (невязка):")
+        for i in range(len(residual)):
+            print(f"  Уравнение {i+1}: {abs(residual[i]):.2e}")
+        print(f"Максимальная невязка: {np.max(np.abs(residual)):.2e}")
+        
     except Exception as e:
         print(f"Ошибка: {e}")

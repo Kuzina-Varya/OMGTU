@@ -8,6 +8,10 @@ import json
 from airflow.providers.apache.hdfs.hooks.webhdfs import WebHDFSHook
 import os
 
+from airflow.sdk import Asset, Metadata
+
+BRONZE_SCHEDULE_ASSET = Asset("hdfs://namenode:9000/user/airflow/schedule")
+
 @dag(
     dag_id="lab2_dag",
     start_date=datetime(2026, 2, 1),
@@ -188,20 +192,40 @@ def lab2_dag():
 
         return hdfs_path
 
+
+    @task(task_id="publish_bronze_asset", outlets=[BRONZE_SCHEDULE_ASSET])
+    def publish_bronze_asset(**context):
+        ld = context["logical_date"].date()
+
+        day_path = (
+            f"/user/airflow/schedule/"
+            f"year={ld.year}/month={ld.month:02d}/day={ld.day:02d}/"
+        )
+
+        yield Metadata(
+            BRONZE_SCHEDULE_ASSET,
+            extra={
+                "date": ld.isoformat(),
+                "hdfs_dir": day_path,
+            },
+        )
+
     end = EmptyOperator(task_id="end")
 
     #  путь -> чтение -> mapping
+    
     name_paths = prepare_teacher_name_paths()
     teacher_result_paths = find_teacher_id.expand(name_path=name_paths)
     teachers_file = get_teachers(teacher_result_paths)
 
     start >> name_paths >> teacher_result_paths >> teachers_file
-
+##с отмашкой 3 дагу
     skipped_text = format_skipped(teachers_file)
     teacher_ids = extract_teacher_ids(teachers_file)
     mapped = process_teacher_schedule.expand(teacher_id=teacher_ids)
+    publish = publish_bronze_asset()
 
     skipped_text >> report_skipped
-    report_skipped >> mapped >> end
+    report_skipped >> mapped >> publish >> end
 
 lab2_dag()
