@@ -1,0 +1,9 @@
+1. Запуск consumer:
+cd .......
+python consumer.py
+
+2. Отправка producer без подгруппы:
+python producer.py --teacher-id 1004267 --group-id 7 --auditorium-id 254 --start-date 2026-05-13 --end-date 2026-05-17
+
+3. Отправка producer с подгруппой:
+python producer.py --teacher-id 1004267 --group-id 7 --subgroup-name "АТП-243/1" --auditorium-id 254 --start-date 2026-05-13 --end-date 2026-05-17

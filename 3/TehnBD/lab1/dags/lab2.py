@@ -17,12 +17,28 @@ BRONZE_SCHEDULE_ASSET = Asset("hdfs://namenode:9000/user/airflow/schedule")
     start_date=datetime(2026, 2, 1),
     schedule=None,
     catchup=False,
-    tags=["omgtu", "schedule2"],
+    tags=["omgtu", "schedule2","lab2"],
     params={
-        "teacher_names": Param(
-            default="",
-            description="Введи фамилии через запятую: Иванов, Петров, Сидоров, Кузнецов, Смирнов",
-        )
+    "teacher_names": Param(
+        default="",
+        description="Фамилии преподавателей через запятую: Иванов, Петров, Сидоров",
+    ),
+    "group_ids": Param(
+        default="",
+        description="ID групп через запятую: 4, 5",
+    ),
+    "auditorium_ids": Param(
+        default="",
+        description="ID аудиторий через запятую: 254, 698",
+    ),
+    "schedule_start_date": Param(
+        default="",
+        description="Дата начала периода расписания в формате YYYY-MM-DD. Если пусто, берётся начало недели logical_date.",
+    ),
+    "schedule_end_date": Param(
+        default="",
+        description="Дата конца периода расписания в формате YYYY-MM-DD. Если пусто, берётся конец недели logical_date.",
+    ),
     },
 )
 def lab2_dag():
@@ -127,18 +143,84 @@ def lab2_dag():
 
         return hdfs_path
 
+    @task(task_id="get_targets")
+    def get_targets(teachers_hdfs_path: str, **context) -> str:
+        hook = WebHDFSHook(webhdfs_conn_id="webhdfs")
+        client = hook.get_conn()
+
+        with client.read(teachers_hdfs_path) as r:
+            teachers_data = json.loads(r.read().decode("utf-8"))
+
+        teacher_ids = teachers_data["teacher_ids"]
+
+        group_ids_str = context["params"].get("group_ids", "")
+        auditorium_ids_str = context["params"].get("auditorium_ids", "")
+
+        group_ids = [
+            int(x.strip())
+            for x in group_ids_str.split(",")
+            if x.strip() != ""
+        ]
+
+        auditorium_ids = [
+            int(x.strip())
+            for x in auditorium_ids_str.split(",")
+            if x.strip() != ""
+        ]
+
+        targets = []
+
+        for teacher_id in teacher_ids:
+            targets.append({
+                "type": "person",
+                "id": int(teacher_id),
+            })
+
+        for group_id in group_ids:
+            targets.append({
+                "type": "group",
+                "id": int(group_id),
+            })
+
+        for auditorium_id in auditorium_ids:
+            targets.append({
+                "type": "auditorium",
+                "id": int(auditorium_id),
+            })
+
+        run_dt = context["logical_date"]
+
+        hdfs_path = (
+            f"/user/airflow/targets/"
+            f"year={run_dt.year}/month={run_dt.month:02d}/day={run_dt.day:02d}/"
+            f"targets.json"
+        )
+
+        client.makedirs(os.path.dirname(hdfs_path))
+
+        payload = json.dumps(
+            {
+                "targets": targets,
+                "source_teachers_file": teachers_hdfs_path,
+            },
+            ensure_ascii=False,
+            indent=2
+        ).encode("utf-8")
+
+        client.write(hdfs_path, payload, overwrite=True)
+
+        return hdfs_path
 
 
-    @task(task_id="extract_teacher_ids")
-    def extract_teacher_ids(hdfs_path: str) -> list[int]:
+    @task(task_id="extract_targets")
+    def extract_targets(hdfs_path: str) -> list[dict]:
         hook = WebHDFSHook(webhdfs_conn_id="webhdfs")
         client = hook.get_conn()
 
         with client.read(hdfs_path) as r:
-            data = r.read().decode("utf-8")
-            teacher_ids = json.loads(data)["teacher_ids"]
+            data = json.loads(r.read().decode("utf-8"))
 
-        return teacher_ids
+        return data["targets"]
 
     @task(task_id="format_skipped")
     def format_skipped(hdfs_path: str) -> str:
@@ -160,26 +242,44 @@ def lab2_dag():
         """,
     )
 
-    @task(task_id="process_teacher_schedule")
-    def process_teacher_schedule(teacher_id: int, **context) -> str:
+    @task(task_id="process_target_schedule")
+    def process_target_schedule(target: dict, **context) -> str:
+        target_type = target["type"]
+        target_id = int(target["id"])
+
         ld = context["logical_date"].date()
-        week_start = ld - timedelta(days=ld.weekday())
-        week_finish = week_start + timedelta(days=6)
+
+        start_param = context["params"].get("schedule_start_date", "")
+        end_param = context["params"].get("schedule_end_date", "")
+
+        if start_param and end_param:
+            week_start = datetime.strptime(start_param, "%Y-%m-%d").date()
+            week_finish = datetime.strptime(end_param, "%Y-%m-%d").date()
+        else:
+            week_start = ld - timedelta(days=ld.weekday())
+            week_finish = week_start + timedelta(days=6)
 
         def fmt(d):
             return f"{d.year:04d}.{d.month:02d}.{d.day:02d}"
 
-        r = requests.get(
-            f"https://rasp.omgtu.ru/api/schedule/person/{teacher_id}?start={fmt(week_start)}&finish={fmt(week_finish)}&lng=1",
-            timeout=30,
+        url = (
+            f"https://rasp.omgtu.ru/api/schedule/"
+            f"{target_type}/{target_id}"
+            f"?start={fmt(week_start)}&finish={fmt(week_finish)}&lng=1"
         )
+
+        print(f"[process_target_schedule] target_type={target_type}")
+        print(f"[process_target_schedule] target_id={target_id}")
+        print(f"[process_target_schedule] url={url}")
+
+        r = requests.get(url, timeout=30)
         r.raise_for_status()
         schedule = r.json()
 
         hdfs_path = (
             f"/user/airflow/schedule/"
             f"year={ld.year}/month={ld.month:02d}/day={ld.day:02d}/"
-            f"teacher_id={teacher_id}/schedule.json"
+            f"type={target_type}/id={target_id}/schedule.json"
         )
 
         hook = WebHDFSHook(webhdfs_conn_id="webhdfs")
@@ -187,7 +287,12 @@ def lab2_dag():
 
         client.makedirs(hdfs_path.rsplit("/", 1)[0])
 
-        payload = json.dumps(schedule, ensure_ascii=False, indent=2).encode("utf-8")
+        payload = json.dumps(
+            schedule,
+            ensure_ascii=False,
+            indent=2
+        ).encode("utf-8")
+
         client.write(hdfs_path, payload, overwrite=True)
 
         return hdfs_path
@@ -202,11 +307,25 @@ def lab2_dag():
             f"year={ld.year}/month={ld.month:02d}/day={ld.day:02d}/"
         )
 
+        start_param = context["params"].get("schedule_start_date", "")
+        end_param = context["params"].get("schedule_end_date", "")
+
+        if start_param and end_param:
+            period_start = start_param
+            period_end = end_param
+        else:
+            week_start = ld - timedelta(days=ld.weekday())
+            week_finish = week_start + timedelta(days=6)
+            period_start = week_start.isoformat()
+            period_end = week_finish.isoformat()
+
         yield Metadata(
             BRONZE_SCHEDULE_ASSET,
             extra={
                 "date": ld.isoformat(),
                 "hdfs_dir": day_path,
+                "period_start": period_start,
+                "period_end": period_end,
             },
         )
 
@@ -221,11 +340,14 @@ def lab2_dag():
     start >> name_paths >> teacher_result_paths >> teachers_file
 ##с отмашкой 3 дагу
     skipped_text = format_skipped(teachers_file)
-    teacher_ids = extract_teacher_ids(teachers_file)
-    mapped = process_teacher_schedule.expand(teacher_id=teacher_ids)
+
+    targets_file = get_targets(teachers_file)
+    targets = extract_targets(targets_file)
+
+    mapped = process_target_schedule.expand(target=targets)
     publish = publish_bronze_asset()
 
     skipped_text >> report_skipped
-    report_skipped >> mapped >> publish >> end
+    report_skipped >> targets_file >> targets >> mapped >> publish >> end
 
 lab2_dag()

@@ -25,7 +25,7 @@ for i in range(1, n + 1):
     sum_right += f(x_i)
 I_right = h * sum_right
 
-print("📐 МЕТОД ПРЯМОУГОЛЬНИКОВ (Вариант 10)")
+print(" МЕТОД ПРЯМОУГОЛЬНИКОВ (Вариант 10)")
 print(f"Пределы: [{a}, {b}], n = {n}, шаг h = {h:.4f}")
 print(f"Левые прямоугольники : I = {I_left:.6f}")
 print(f"Правые прямоугольники: I = {I_right:.6f}")
