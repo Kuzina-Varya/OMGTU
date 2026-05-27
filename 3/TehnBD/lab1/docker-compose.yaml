@@ -124,7 +124,8 @@ services:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 10s
       timeout: 10s
-      retries: 5
+      retries: 30
+      start_period: 240s
     restart: always
 
   reschedule-consumer:
